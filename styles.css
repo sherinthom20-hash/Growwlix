@@ -28,6 +28,12 @@ body {
 	line-height: 1.6;
 }
 
+/* Make paragraph text justified for improved reading flow */
+p {
+	text-align: justify;
+	text-justify: inter-word;
+}
+
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 
