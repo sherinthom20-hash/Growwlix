@@ -3,83 +3,864 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfolio – Our Recent Projects</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Portfolio – Featured Work</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(14, 27, 47, 0.78);
+      --panel-strong: #10203a;
+      --card: rgba(255, 255, 255, 0.06);
+      --stroke: rgba(255, 255, 255, 0.12);
+      --text: #f5f7fb;
+      --muted: #b8c3d9;
+      --primary: #7c5cff;
+      --secondary: #1fd1c2;
+      --accent: #8ef0a8;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      --radius: 24px;
+      --radius-sm: 18px;
+      --container: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124, 92, 255, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(31, 209, 194, 0.18), transparent 24%),
+        linear-gradient(180deg, #07111f 0%, #081420 40%, #09182a 100%);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .portfolio.section {
+      position: relative;
+      padding: 96px 20px;
+      overflow: hidden;
+    }
+
+    .portfolio.section::before,
+    .portfolio.section::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.22;
+      z-index: 0;
+    }
+
+    .portfolio.section::before {
+      background: #7c5cff;
+      top: 10%;
+      left: -100px;
+    }
+
+    .portfolio.section::after {
+      background: #1fd1c2;
+      bottom: 8%;
+      right: -80px;
+    }
+
+    .container {
+      width: min(100%, var(--container));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      max-width: 820px;
+      margin: 0 auto 42px;
+      text-align: center;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #d8e2f6;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-header h2 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+
+    .accent-text {
+      background: linear-gradient(90deg, #7c5cff, #66d7ff, #8ef0a8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .section-header p {
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.8;
+      max-width: 760px;
+    }
+
+    .stats-row {
+      margin: 30px auto 52px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 880px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      border: 1px solid var(--stroke);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      text-align: left;
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .featured-project {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      padding: 32px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.16), rgba(31, 209, 194, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .badge-row,
+    .project-meta,
+    .tag-row,
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge,
+    .project-label,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .badge-primary,
+    .project-label.primary {
+      background: rgba(142, 240, 168, 0.14);
+      color: #beffcd;
+    }
+
+    .badge,
+    .project-label {
+      background: rgba(255, 255, 255, 0.08);
+      color: #dce5f9;
+    }
+
+    .fp-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .fp-title {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .fp-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.85;
+      max-width: 620px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: #07111f;
+      background: linear-gradient(90deg, #8ef0a8, #66d7ff);
+      box-shadow: 0 12px 30px rgba(102, 215, 255, 0.22);
+    }
+
+    .btn-ghost {
+      color: #edf3ff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .fp-right {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .fp-preview {
+      width: 100%;
+      min-height: 100%;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background:
+        linear-gradient(180deg, rgba(7, 17, 31, 0.35), rgba(7, 17, 31, 0.75)),
+        radial-gradient(circle at 18% 18%, rgba(142, 240, 168, 0.22), transparent 30%),
+        radial-gradient(circle at 75% 22%, rgba(102, 215, 255, 0.18), transparent 28%),
+        linear-gradient(135deg, #16253f 0%, #0d1c30 100%);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .preview-window {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    .preview-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .mini-bars {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-bars span {
+      display: block;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(102, 215, 255, 0.95), rgba(142, 240, 168, 0.55));
+    }
+
+    .mini-bars span:nth-child(2) { width: 82%; }
+    .mini-bars span:nth-child(3) { width: 68%; }
+    .mini-bars span:nth-child(4) { width: 92%; }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .preview-card {
+      min-height: 105px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .preview-card strong {
+      font-size: 1rem;
+    }
+
+    .preview-card span {
+      color: #c8d5ee;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 8px;
+    }
+
+    .project-card {
+      position: relative;
+      border-radius: var(--radius);
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(142, 240, 168, 0.3);
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.34);
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 45%);
+      pointer-events: none;
+    }
+
+    .pc-visual {
+      position: relative;
+      min-height: 170px;
+      border-radius: 20px;
+      padding: 0;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .pc-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 20px;
+      opacity: 0.96;
+      transform: scale(1.02);
+    }
+
+    .visual-reading { background: linear-gradient(135deg, rgba(142, 240, 168, 0.24), rgba(102, 215, 255, 0.12), rgba(124, 92, 255, 0.2)); }
+    .visual-cafe { background: linear-gradient(135deg, rgba(255, 193, 113, 0.22), rgba(52, 168, 83, 0.18)); }
+    .visual-shop { background: linear-gradient(135deg, rgba(124, 92, 255, 0.24), rgba(102, 215, 255, 0.12)); }
+    .visual-health { background: linear-gradient(135deg, rgba(102, 215, 255, 0.22), rgba(31, 209, 194, 0.14)); }
+    .visual-saas { background: linear-gradient(135deg, rgba(124, 92, 255, 0.24), rgba(242, 125, 255, 0.12)); }
+    .visual-corporate { background: linear-gradient(135deg, rgba(142, 240, 168, 0.18), rgba(31, 209, 194, 0.14), rgba(102, 215, 255, 0.12)); }
+
+    .visual-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      background: rgba(7, 17, 31, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .visual-lines {
+      display: grid;
+      gap: 10px;
+    }
+
+    .visual-lines span {
+      display: block;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .visual-lines span:nth-child(1) { width: 88%; }
+    .visual-lines span:nth-child(2) { width: 66%; }
+    .visual-lines span:nth-child(3) { width: 78%; }
+
+    .pc-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .pc-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .pc-title {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .pc-desc {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 0.97rem;
+      line-height: 1.75;
+    }
+
+    .pc-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tech-stack span {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #dce5f9;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .link-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-weight: 700;
+      transition: gap 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .link-arrow:hover { gap: 14px; }
+
+    .portfolio-cta {
+      margin-top: 30px;
+      padding: 28px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid var(--stroke);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-blurb {
+      margin: 0;
+      font-size: 1.08rem;
+      color: #e7eefc;
+      line-height: 1.7;
+      max-width: 700px;
+    }
+
+    .reveal,
+    .delay-1,
+    .delay-2,
+    .delay-3 {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .featured-project,
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .portfolio.section {
+        padding: 72px 16px;
+      }
+
+      .featured-project,
+      .project-card,
+      .portfolio-cta {
+        padding: 20px;
+      }
+
+      .fp-preview {
+        padding: 18px;
+      }
+
+      .preview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pc-footer,
+      .portfolio-cta {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .pc-title-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
   <main>
-    <section class="portfolio section">
+    <section class="portfolio section" id="portfolio">
       <div class="container">
         <header class="section-header reveal">
-          <div class="pill">Portfolio</div>
-          <h2>Our Recent <span class="accent-text">Projects</span></h2>
-          <p>We have worked on multiple digital projects including business websites, high‑converting landing pages, and comprehensive branding design projects.</p>
+          <div class="pill"><i class="fa-solid fa-sparkles"></i> Portfolio Showcase</div>
+          <h2>Websites crafted to <span class="accent-text">build trust, drive clicks, and grow brands</span></h2>
+          <p>
+            Explore a curated selection of live websites by Growwlix — from modern corporate experiences and startup landing pages
+            to eCommerce storefronts, healthcare interfaces, and hospitality brands designed for real-world impact.
+          </p>
         </header>
+
+        <div class="stats-row reveal">
+          <div class="stat-card">
+            <span class="stat-value">6+</span>
+            <span class="stat-label">Live website examples across business, healthcare, SaaS, and eCommerce.</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Responsive layouts built to look sharp on desktop, tablet, and mobile.</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">Fast</span>
+            <span class="stat-label">Clean static website experiences designed for launch speed and conversions.</span>
+          </div>
+        </div>
 
         <div class="featured-project reveal">
           <div class="fp-left">
             <div class="badge-row">
-              <span class="badge badge-primary">Featured</span>
-              <span class="badge">Web Development</span>
+              <span class="badge badge-primary"><i class="fa-solid fa-star"></i> Featured Project</span>
+              <span class="badge"><i class="fa-solid fa-briefcase"></i> Corporate Website</span>
             </div>
-            <h3 class="fp-title">Growlix</h3>
-            <p class="fp-desc">A comprehensive business website and brand showcase platform designed to help startups launch their MVPs efficiently. Features a modern dark UI, responsive layout, and integrated lead generation tools.</p>
+            <h3 class="fp-title">Corporate Website</h3>
+            <p class="fp-desc">
+              A polished B2B company website designed to establish authority, explain services clearly, and convert visitors into qualified leads.
+              The layout balances modern visuals with professional structure, making it ideal for agencies, service businesses, and growth-focused brands.
+            </p>
             <div class="tag-row">
-              <span class="tag">UI/UX Design</span>
-              <span class="tag">Frontend</span>
-              <span class="tag">Branding</span>
+              <span class="tag">Modern UI</span>
+              <span class="tag">Business Positioning</span>
+              <span class="tag">Lead Generation</span>
+              <span class="tag">Responsive Layout</span>
             </div>
-            <a href="#" class="link-arrow">View Live Project</a>
+            <div class="btn-row">
+              <a href="https://corporatewebsite.growwlix.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Website
+              </a>
+              <a href="#project-grid" class="btn btn-ghost">
+                <i class="fa-solid fa-layer-group"></i> Explore More Projects
+              </a>
+            </div>
           </div>
+
           <div class="fp-right">
-            <div class="fp-image" aria-hidden="true"></div>
+            <div class="fp-preview">
+              <div class="preview-window">
+                <div class="preview-top">
+                  <div class="dots"><span></span><span></span><span></span></div>
+                  <div class="project-label primary"><i class="fa-solid fa-bolt"></i> Premium Presentation</div>
+                </div>
+                <div class="mini-bars">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <div class="preview-grid">
+                <div class="preview-card">
+                  <strong>Trust-building sections</strong>
+                  <span>Structured content blocks that support credibility and decision-making.</span>
+                </div>
+                <div class="preview-card">
+                  <strong>Clean service overview</strong>
+                  <span>Clear hierarchy that explains what the business does and who it helps.</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="project-grid">
+        <div class="project-grid" id="project-grid">
           <article class="project-card reveal delay-1">
-            <div class="pc-image" aria-hidden="true"></div>
+            <div class="pc-visual visual-reading">
+              <img class="pc-image" src="assets/Image.png" alt="NoveLeaf preview" loading="lazy" />
+            </div>
             <div class="pc-body">
-              <div class="pc-icon"><i class="fa-solid fa-building"></i></div>
-              <h4 class="pc-title">Business Websites</h4>
-              <p class="pc-desc">Professional digital presence for modern enterprises.</p>
-              <a href="#" class="link-arrow small">See Examples</a>
+              <div class="project-meta">
+                <span class="project-label primary">Education / Reading</span>
+                <span class="project-label">Landing Page</span>
+              </div>
+              <div class="pc-title-row">
+                <h4 class="pc-title">NoveLeaf</h4>
+              </div>
+              <p class="pc-desc">
+                A clean, engaging website concept for a reading-focused brand, presented with a modern interface that feels calm,
+                premium, and easy to explore for digital audiences.
+              </p>
+              <div class="pc-footer">
+                <div class="tech-stack">
+                  <span>Elegant Layout</span>
+                  <span>Brand Presence</span>
+                  <span>Responsive UI</span>
+                </div>
+                <a href="https://noveleaf.onrender.com" target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  View Live <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
             </div>
           </article>
 
           <article class="project-card reveal delay-2">
-            <div class="pc-image" aria-hidden="true"></div>
+            <div class="pc-visual visual-cafe">
+              <img class="pc-image" src="assets/Image.png" alt="UrbanLeaf Cafe preview" loading="lazy" />
+            </div>
             <div class="pc-body">
-              <div class="pc-icon"><i class="fa-solid fa-chart-line"></i></div>
-              <h4 class="pc-title">Landing Pages</h4>
-              <p class="pc-desc">High‑conversion design optimized for lead generation.</p>
-              <a href="#" class="link-arrow small">See Examples</a>
+              <div class="project-meta">
+                <span class="project-label primary">Hospitality</span>
+                <span class="project-label">Local Business</span>
+              </div>
+              <div class="pc-title-row">
+                <h4 class="pc-title">UrbanLeaf Café</h4>
+              </div>
+              <p class="pc-desc">
+                A stylish café website designed to communicate ambience, menu appeal, and local brand identity — ideal for restaurants,
+                cafés, and lifestyle-driven hospitality businesses.
+              </p>
+              <div class="pc-footer">
+                <div class="tech-stack">
+                  <span>Menu Showcase</span>
+                  <span>Visual Branding</span>
+                  <span>Mobile Friendly</span>
+                </div>
+                <a href="https://urbanleafcafe.onrender.com" target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  View Live <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
             </div>
           </article>
 
           <article class="project-card reveal delay-3">
-            <div class="pc-image" aria-hidden="true"></div>
+            <div class="pc-visual visual-shop">
+              <img class="pc-image" src="assets/Image.png" alt="Shoplyx preview" loading="lazy" />
+            </div>
             <div class="pc-body">
-              <div class="pc-icon"><i class="fa-solid fa-pen-nib"></i></div>
-              <h4 class="pc-title">Branding & Design</h4>
-              <p class="pc-desc">Cohesive visual identities that tell your story.</p>
-              <a href="#" class="link-arrow small">See Examples</a>
+              <div class="project-meta">
+                <span class="project-label primary">eCommerce</span>
+                <span class="project-label">Online Store</span>
+              </div>
+              <div class="pc-title-row">
+                <h4 class="pc-title">Shoplyx</h4>
+              </div>
+              <p class="pc-desc">
+                A sleek storefront experience created to highlight products, promotions, and buyer confidence through a modern shopping-focused
+                interface and conversion-ready page structure.
+              </p>
+              <div class="pc-footer">
+                <div class="tech-stack">
+                  <span>Product Focus</span>
+                  <span>Storefront Design</span>
+                  <span>Conversion UI</span>
+                </div>
+                <a href="https://shoplx.onrender.com" target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  View Live <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal delay-1">
+            <div class="pc-visual visual-health">
+              <img class="pc-image" src="assets/Image.png" alt="DoctorApp preview" loading="lazy" />
+            </div>
+            <div class="pc-body">
+              <div class="project-meta">
+                <span class="project-label primary">Healthcare</span>
+                <span class="project-label">Appointment UX</span>
+              </div>
+              <div class="pc-title-row">
+                <h4 class="pc-title">DoctorApp</h4>
+              </div>
+              <p class="pc-desc">
+                A healthcare-oriented interface focused on clarity, accessibility, and trust — suitable for doctors, clinics, and medical booking
+                platforms looking for a polished digital presence.
+              </p>
+              <div class="pc-footer">
+                <div class="tech-stack">
+                  <span>Medical UX</span>
+                  <span>Clear Navigation</span>
+                  <span>Trust Signals</span>
+                </div>
+                <a href="https://doctorapp-bhmh.onrender.com" target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  View Live <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal delay-2">
+            <div class="pc-visual visual-saas">
+              <img class="pc-image" src="assets/Image.png" alt="NovaApp preview" loading="lazy" />
+            </div>
+            <div class="pc-body">
+              <div class="project-meta">
+                <span class="project-label primary">SaaS</span>
+                <span class="project-label">Product Landing</span>
+              </div>
+              <div class="pc-title-row">
+                <h4 class="pc-title">NovaApp</h4>
+              </div>
+              <p class="pc-desc">
+                A startup-style SaaS website built to communicate product value quickly, showcase features with confidence, and support early-stage
+                traction through strong messaging and modern visuals.
+              </p>
+              <div class="pc-footer">
+                <div class="tech-stack">
+                  <span>SaaS Messaging</span>
+                  <span>Feature Sections</span>
+                  <span>Startup Feel</span>
+                </div>
+                <a href="https://novaapp-79yv.onrender.com" target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  View Live <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal delay-3">
+            <div class="pc-visual visual-corporate">
+              <img class="pc-image" src="assets/Image.png" alt="Corporate Website preview" loading="lazy" />
+            </div>
+            <div class="pc-body">
+              <div class="project-meta">
+                <span class="project-label primary">Corporate</span>
+                <span class="project-label">Professional Brand</span>
+              </div>
+              <div class="pc-title-row">
+                <h4 class="pc-title">Corporate Website</h4>
+              </div>
+              <p class="pc-desc">
+                A strong corporate web presence crafted for service-focused businesses that need a professional image, clear structure, and a
+                website that feels credible from the first scroll.
+              </p>
+              <div class="pc-footer">
+                <div class="tech-stack">
+                  <span>B2B Positioning</span>
+                  <span>Clean Sections</span>
+                  <span>Lead Ready</span>
+                </div>
+                <a href="https://corporatewebsite.growwlix.com/" target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  View Live <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
             </div>
           </article>
         </div>
 
         <div class="portfolio-cta reveal">
-          <p class="cta-blurb">Want to see more of our work?</p>
-          <a href="#" class="btn btn-ghost"><i class="fa-solid fa-download"></i> More projects available on request</a>
+          <p class="cta-blurb">
+            Want a similar website for your business? Growwlix creates launch-ready websites that look premium, communicate value clearly,
+            and help brands present their services with confidence.
+          </p>
+          <a href="https://growwlix.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa-solid fa-paper-plane"></i> Start Your Website Project
+          </a>
         </div>
       </div>
     </section>
   </main>
-
-  <script src="script.js"></script>
-  
 </body>
 </html>
